@@ -4,21 +4,24 @@
   <meta charset="utf-8">
   
   
-  <title>linux下C++ socket网络编程——即时通信系统 | 我的博客</title>
+  <title>linux下C++ socket网络编程 即时通信系统 | 猿的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="一：项目内容 本项目使用C++实现一个具备服务器端和客户端即时通信且具有私聊功能的聊天室。 目的是学习C++网络开发的基本概念，同时也可以熟悉下Linux下的C++程序编译和简单MakeFile编写 二：需求分析 这个聊天室主要有两个程序： 1.服务端：能够接受新的客户连接，并将每个客户端发来的信息，广播给对应的目标客户端。 2.客户端：能够连接服务器，并向服务器发送消息，同时可以接收服务器发来的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="linux下C++ socket网络编程——即时通信系统">
-<meta property="og:url" content="http://example.com/2021/11/13/%E6%88%91%E7%9A%84%E5%8D%9A%E5%AE%A2/index.html">
-<meta property="og:site_name" content="我的博客">
+<meta property="og:title" content="linux下C++ socket网络编程 即时通信系统">
+<meta property="og:url" content="http://example.com/2021/11/13/socket/index.html">
+<meta property="og:site_name" content="猿的博客">
 <meta property="og:description" content="一：项目内容 本项目使用C++实现一个具备服务器端和客户端即时通信且具有私聊功能的聊天室。 目的是学习C++网络开发的基本概念，同时也可以熟悉下Linux下的C++程序编译和简单MakeFile编写 二：需求分析 这个聊天室主要有两个程序： 1.服务端：能够接受新的客户连接，并将每个客户端发来的信息，广播给对应的目标客户端。 2.客户端：能够连接服务器，并向服务器发送消息，同时可以接收服务器发来的">
 <meta property="og:locale">
+<meta property="og:image" content="http://example.com/2021/11/13/socket/yuan.jpeg">
+<meta property="og:image" content="http://example.com/2021/11/13/socket/socket.jpg">
 <meta property="article:published_time" content="2021-11-13T15:00:09.940Z">
-<meta property="article:modified_time" content="2021-11-14T11:53:09.499Z">
+<meta property="article:modified_time" content="2021-11-20T02:49:33.118Z">
 <meta property="article:author" content="maoyuzhi">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/11/13/socket/yuan.jpeg">
   
-    <link rel="alternate" href="/atom.xml" title="我的博客" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="猿的博客" type="application/atom+xml">
   
   
     <link rel="shortcut icon" href="/favicon.png">
@@ -46,7 +49,7 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">我的博客</a>
+        <a href="/" id="logo">猿的博客</a>
       </h1>
       
     </div>
@@ -63,19 +66,19 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Suche"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
       </div>
     </div>
   </div>
 </header>
 
       <div class="outer">
-        <section id="main"><article id="post-我的博客" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+        <section id="main"><article id="post-socket" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
-    <a href="/2021/11/13/%E6%88%91%E7%9A%84%E5%8D%9A%E5%AE%A2/" class="article-date">
+    <a href="/2021/11/13/socket/" class="article-date">
   <time class="dt-published" datetime="2021-11-13T15:00:09.940Z" itemprop="datePublished">2021-11-13</time>
 </a>
     
@@ -87,7 +90,7 @@
         
   
     <h1 class="p-name article-title" itemprop="headline name">
-      linux下C++ socket网络编程——即时通信系统
+      linux下C++ socket网络编程 即时通信系统
     </h1>
   
 
@@ -95,7 +98,7 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>一：项目内容</p>
+        <p><img src="/2021/11/13/socket/yuan.jpeg" alt="猿"><br>一：项目内容</p>
 <p>本项目使用C++实现一个具备服务器端和客户端即时通信且具有私聊功能的聊天室。</p>
 <p>目的是学习C++网络开发的基本概念，同时也可以熟悉下Linux下的C++程序编译和简单MakeFile编写</p>
 <p>二：需求分析</p>
@@ -123,7 +126,7 @@
 <p>父进程：</p>
 <p>1.使用epoll机制接受服务端发来的消息，并显示给用户，使用户看到其他用户的信息。</p>
 <p>2.将子进程发送的聊天信息从管道(pipe)中读取出来，并发送给客户端。</p>
-<p>四：C/S模型</p>
+<p>四：C/S模型<br><img src="/2021/11/13/socket/socket.jpg" alt="socket"></p>
 <p>TCP服务端通信常规步骤：</p>
 <p>1.socket()创建TCP套接字</p>
 <p>2.bind()将创建的套接字绑定到一个本地地址和端口上</p>
@@ -147,9 +150,7 @@
 <p>eg. 你打电话问书店老板有没有《网络编程》这本书，老板去书架上找，如果是阻塞式调用，你就会把自己一直挂起，守在电话边上，直到得到这本书有或者没有的答案。如果是非阻塞式调用，你可以干别的事情去，隔一段时间来看一下老板有没有告诉你结果。</p>
 <p>同步异步是对书店老板而言(同步老板不会提醒你找到结果了，异步老板会打电话告诉你)，阻塞和非阻塞是对你而言。</p>
 <p>socket()函数创建套接字时，默认的套接字都是阻塞的，非阻塞设置方式代码：</p>
-<pre><code>//将文件描述符设置为非阻塞方式（利用fcntl函数）
-fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFD, 0)| O_NONBLOCK);
-</code></pre>
+<p>//将文件描述符设置为非阻塞方式（利用fcntl函数）<br>fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFD, 0)| O_NONBLOCK);</p>
 <ol start="2">
 <li>epoll</li>
 </ol>
@@ -183,7 +184,7 @@ fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFD, 0)| O_NONBLOCK);
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/11/13/%E6%88%91%E7%9A%84%E5%8D%9A%E5%AE%A2/" data-id="ckvz6wxb70001wsic1epo6gbf" data-title="linux下C++ socket网络编程——即时通信系统" class="article-share-link">Teilen</a>
+      <a data-url="http://example.com/2021/11/13/socket/" data-id="ckvz8xnx900008oic12ovcjl7" data-title="linux下C++ socket网络编程 即时通信系统" class="article-share-link">Share</a>
       
       
       
@@ -193,9 +194,18 @@ fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFD, 0)| O_NONBLOCK);
     
 <nav id="article-nav">
   
+    <a href="/2021/11/20/thread/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Linux线程退出方式
+        
+      </div>
+    </a>
+  
   
     <a href="/2021/11/13/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Älter</strong>
+      <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">Hello World</div>
     </a>
   
@@ -219,7 +229,7 @@ fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFD, 0)| O_NONBLOCK);
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li></ul>
     </div>
@@ -229,12 +239,16 @@ fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFD, 0)| O_NONBLOCK);
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
           <li>
-            <a href="/2021/11/13/%E6%88%91%E7%9A%84%E5%8D%9A%E5%AE%A2/">linux下C++ socket网络编程——即时通信系统</a>
+            <a href="/2021/11/20/thread/">Linux线程退出方式</a>
+          </li>
+        
+          <li>
+            <a href="/2021/11/13/socket/">linux下C++ socket网络编程 即时通信系统</a>
           </li>
         
           <li>

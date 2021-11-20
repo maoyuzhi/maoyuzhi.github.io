@@ -4,15 +4,21 @@
   <meta charset="utf-8">
   
   
-  <title>猿的博客</title>
+  <title>Linux线程退出方式 | 猿的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="猿的博客">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="一：多线程安全退出 在编写多线程代码时，经常面临线程安全退出的问题。一般情况下，选择检查标志位的方式：在线程的while循环中，执行完例程后，都对标志位进行检查，如果标志位指示继续执行则再次执行例程，如果标志位设置为退出状态，则跳出循环，结束线程的运行。 这个标志位需要主线程（或其他线程）设置，设置后，主线程调用pthread_join接口进入休眠（接口参数指定了等待的线程控制指针），子线程退出后">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux线程退出方式">
+<meta property="og:url" content="http://example.com/2021/11/20/thread/index.html">
 <meta property="og:site_name" content="猿的博客">
+<meta property="og:description" content="一：多线程安全退出 在编写多线程代码时，经常面临线程安全退出的问题。一般情况下，选择检查标志位的方式：在线程的while循环中，执行完例程后，都对标志位进行检查，如果标志位指示继续执行则再次执行例程，如果标志位设置为退出状态，则跳出循环，结束线程的运行。 这个标志位需要主线程（或其他线程）设置，设置后，主线程调用pthread_join接口进入休眠（接口参数指定了等待的线程控制指针），子线程退出后">
 <meta property="og:locale">
+<meta property="og:image" content="http://example.com/2021/11/20/thread/thread1.png">
+<meta property="article:published_time" content="2021-11-20T02:34:17.590Z">
+<meta property="article:modified_time" content="2021-11-20T02:48:37.590Z">
 <meta property="article:author" content="maoyuzhi">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/11/20/thread/thread1.png">
   
     <link rel="alternate" href="/atom.xml" title="猿的博客" type="application/atom+xml">
   
@@ -69,9 +75,7 @@
 </header>
 
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-thread" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+        <section id="main"><article id="post-thread" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2021/11/20/thread/" class="article-date">
   <time class="dt-published" datetime="2021-11-20T02:34:17.590Z" itemprop="datePublished">2021-11-20</time>
@@ -84,8 +88,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2021/11/20/thread/">Linux线程退出方式</a>
+    <h1 class="p-name article-title" itemprop="headline name">
+      Linux线程退出方式
     </h1>
   
 
@@ -158,182 +162,19 @@ printf(&quot;pthread_join stop datetime: %d-%d-%d %d:%d:%d\n&quot;,tm_now-&gt;tm
     </footer>
   </div>
   
-</article>
-
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-socket" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2021/11/13/socket/" class="article-date">
-  <time class="dt-published" datetime="2021-11-13T15:00:09.940Z" itemprop="datePublished">2021-11-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2021/11/13/socket/">linux下C++ socket网络编程 即时通信系统</a>
-    </h1>
+    <a href="/2021/11/13/socket/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">linux下C++ socket网络编程 即时通信系统</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p><img src="/2021/11/13/socket/yuan.jpeg" alt="猿"><br>一：项目内容</p>
-<p>本项目使用C++实现一个具备服务器端和客户端即时通信且具有私聊功能的聊天室。</p>
-<p>目的是学习C++网络开发的基本概念，同时也可以熟悉下Linux下的C++程序编译和简单MakeFile编写</p>
-<p>二：需求分析</p>
-<p>这个聊天室主要有两个程序：</p>
-<p>1.服务端：能够接受新的客户连接，并将每个客户端发来的信息，广播给对应的目标客户端。</p>
-<p>2.客户端：能够连接服务器，并向服务器发送消息，同时可以接收服务器发来的消息。</p>
-<p>即最简单的C/S模型。</p>
-<p>三：抽象与细化</p>
-<p>服务端类需要支持：</p>
-<p>1.支持多个客户端接入，实现聊天室基本功能。</p>
-<p>2.启动服务，建立监听端口等待客户端连接。</p>
-<p>3.使用epoll机制实现并发，增加效率。</p>
-<p>4.客户端连接时，发送欢迎消息，并存储连接记录。</p>
-<p>5.客户端发送消息时，根据消息类型，广播给所有用户(群聊)或者指定用户(私聊)。</p>
-<p>6.客户端请求退出时，对相应连接信息进行清理。</p>
-<p>客户端类需要支持：</p>
-<p>1.连接服务器。</p>
-<p>2.支持用户输入消息，发送给服务端。</p>
-<p>3.接受并显示服务端发来的消息。</p>
-<p>4.退出连接。</p>
-<p>涉及两个事情，一个写，一个读。所以客户端需要两个进程分别支持以下功能。</p>
-<p>子进程：</p>
-<p>1.等待用户输入信息。</p>
-<p>2.将聊天信息写入管道(pipe),并发送给父进程。</p>
-<p>父进程：</p>
-<p>1.使用epoll机制接受服务端发来的消息，并显示给用户，使用户看到其他用户的信息。</p>
-<p>2.将子进程发送的聊天信息从管道(pipe)中读取出来，并发送给客户端。</p>
-<p>四：C/S模型<br><img src="/2021/11/13/socket/socket.jpg" alt="socket"></p>
-<p>TCP服务端通信常规步骤：</p>
-<p>1.socket()创建TCP套接字</p>
-<p>2.bind()将创建的套接字绑定到一个本地地址和端口上</p>
-<p>3.listen()，将套接字设为监听模式，准备接受客户请求</p>
-<p>4.accept()等用户请求到来时接受，返回一个对应此连接新套接字</p>
-<p>5.用accept()返回的套接字和客户端进行通信，recv()/send() 接受/发送信息。</p>
-<p>6.返回，等待另一个客户请求。</p>
-<p>7.关闭套接字</p>
-<p>TCP客户端通信常规步骤：</p>
-<p>1.socket()创建TCP套接字。</p>
-<p>2.connect()建立到达服务器的连接。</p>
-<p>3.与客户端进行通信，recv()/send()接受/发送信息，write()/read() 子进程写入管道，父进程从管道中读取信息然后send给客户端</p>
-<ol start="5">
-<li>close() 关闭客户连接。</li>
-</ol>
-<p>五：相关技术介绍</p>
-<p>1.socket 阻塞与非阻塞</p>
-<p>阻塞与非阻塞关注的是程序在等待调用结果时(消息，返回值)的状态。</p>
-<p>阻塞调用是指在调用结果返回前，当前线程会被挂起，调用线程只有在得到调用结果之后才会返回。</p>
-<p>非阻塞调用是指在不能立刻得到结果之前，该调用不会阻塞当前线程。</p>
-<p>eg. 你打电话问书店老板有没有《网络编程》这本书，老板去书架上找，如果是阻塞式调用，你就会把自己一直挂起，守在电话边上，直到得到这本书有或者没有的答案。如果是非阻塞式调用，你可以干别的事情去，隔一段时间来看一下老板有没有告诉你结果。</p>
-<p>同步异步是对书店老板而言(同步老板不会提醒你找到结果了，异步老板会打电话告诉你)，阻塞和非阻塞是对你而言。</p>
-<p>socket()函数创建套接字时，默认的套接字都是阻塞的，非阻塞设置方式代码：</p>
-<p>//将文件描述符设置为非阻塞方式（利用fcntl函数）<br>fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFD, 0)| O_NONBLOCK);</p>
-<ol start="2">
-<li>epoll</li>
-</ol>
-<p>当服务端的人数越来越多，会导致资源吃紧，I/O效率越来越低，这时就应该考虑epoll，epoll是Linux内核为处理大量句柄而改进的poll，是linux特有的I/O函数。其特点如下：</p>
-<p>1）epoll是Linux下多路复用IO接口select/poll的增强版本，其实现和使用方式与select/poll大有不同，epoll通过一组函数来完成有关任务，而不是一个函数。</p>
-<p>2）epoll之所以高效，是因为epoll将用户关心的文件描述符放到内核里的一个事件列表中，而不是像select/poll每次调用都需要重复传入文件描述符集或事件集（大量拷贝开销），比如一个事件发生，epoll无需遍历整个被监听的描述符集，而只需要遍历哪些被内核IO事件异步唤醒而加入就绪队列的描述符集合即可。</p>
-<p>3)epoll有两种工作方式，LT(Level triggered) 水平触发 、ET(Edge triggered)边沿触发。LT是select/poll的工作方式，比较低效，而ET是epoll具有的高速工作方式。</p>
-<p>Epoll 用法（三步曲）：</p>
-<p>第一步：int epoll_create(int size)系统调用，创建一个epoll句柄，参数size用来告诉内核监听的数目，size为epoll支持的最大句柄数。</p>
-<p>第二步:int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event) 事件注册函数</p>
-<p>参数 epfd为epoll的句柄。参数op 表示动作 三个宏来表示：EPOLL_CTL_ADD注册新fd到epfd 、EPOLL_CTL_MOD 修改已经注册的fd的监听事件、EPOLL_CTL_DEL从epfd句柄中删除fd。参数fd为需要监听的标识符。参数结构体epoll_event告诉内核需要监听的事件。</p>
-<p>第三步：int epoll_wait(int epfd, struct epoll_event * events, int maxevents, int timeout) 等待事件的产生，通过调用收集在epoll监控中已经发生的事件。参数struct epoll_event 是事件队列 把就绪的事件放进去。</p>
-<p>eg. 服务端使用epoll的时候步骤如下：</p>
-<p>1.调用epoll_create()在linux内核中创建一个事件表。</p>
-<p>2.然后将文件描述符(监听套接字listener)添加到事件表中</p>
-<p>3.在主循环中，调用epoll_wait()等待返回就绪的文件描述符集合。</p>
-<p>4.分别处理就绪的事件集合，本项目中一共有两类事件：新用户连接事件和用户发来消息事件。</p>
-<p>六：代码结构</p>
-<p>每个文件的作用：</p>
-<p>1.Common.h：公共头文件，包括所有需要的宏以及socket网络编程头文件，以及消息结构体（用来表示消息类别等）</p>
-<p>2.Client.h Client.cpp :客户端类的实现</p>
-<p>3.Server.h Server.cpp : 服务端类的实现</p>
-<p>4.ClientMain.cpp ServerMain.cpp 客户端及服务端的主函数。</p>
-<p>七：代码实现</p>
-<p>Common.h</p>
-<p>定义一些共用的宏定义，包括一些共用的网络编程相关头文件。</p>
-<p>1）定义一个函数将文件描述符fd添加到epfd表示的内核事件表中供客户端和服务端两个类使用。</p>
-<p>2）定义一个信息数据结构，用来表示传送的信息，结构体包括发送方fd, 接收方fd,用来表示消息类别的type,还有文字信息。</p>
-<p>函数recv() send() write() read() 参数传递是字符串，所以在传送前/接受后要把结构体转换为字符串/字符串转换为结构体。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2021/11/13/socket/" data-id="ckvz8xnx900008oic12ovcjl7" data-title="linux下C++ socket网络编程 即时通信系统" class="article-share-link">Share</a>
-      
-      
-      
-    </footer>
-  </div>
   
 </article>
-
-
-
-  
-    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2021/11/13/hello-world/" class="article-date">
-  <time class="dt-published" datetime="2021-11-13T14:38:45.989Z" itemprop="datePublished">2021-11-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2021/11/13/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2021/11/13/hello-world/" data-id="ckvz6wxay0000wsicc4ra1s4o" data-title="Hello World" class="article-share-link">Share</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
 
 
 </section>
