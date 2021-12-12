@@ -71,6 +71,91 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-selectpipe" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/12/12/selectpipe/" class="article-date">
+  <time class="dt-published" datetime="2021-12-12T02:11:37.557Z" itemprop="datePublished">2021-12-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/12/12/selectpipe/">linux使用非阻塞I/O的应用程序通常会使用select()</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>参考<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/tayinyinyueyue/article/details/54629341">https://blog.csdn.net/tayinyinyueyue/article/details/54629341</a></p>
+<p>select使用：</p>
+<p>#include &lt;stdio.h&gt; // printf<br>#include &lt;stdlib.h&gt; // exit<br>#include &lt;unistd.h&gt; // pipe<br>#include &lt;string.h&gt; // strlen<br>#include &lt;pthread.h&gt; // pthread_create</p>
+<p>using namespace std;<br>bool threadQuit = false;<br>void <em>func(void * fd)<br>{<br>    // printf(“write fd = %d\n”, <em>(int</em>)fd);<br>    // char str[] = “hello everyone!”;<br>    //write( <em>(int</em>)fd, str, strlen(str) );<br>    sleep(10);<br>    // for (int i = 0 ; i &lt;10 ; i++)<br>    // {<br>    //     write( <em>(int</em>)fd, str, strlen(str) );<br>    // }<br>    sleep(5);<br>    printf(“sleep(15) end write pipe!\n”);<br>    printf(“write fd = %d\n”, <em>(int</em>)fd);<br>    char str[] = “hello everyone!”;<br>    write( <em>(int</em>)fd, str, strlen(str) );<br>    // close(</em>(int*)fd);<br>    return 0;<br>}<br>void *func2(void * fd)<br>{<br>    printf(“func2 threadQuit = %d\n”, threadQuit);<br>    threadQuit = true;<br>    return 0;<br>}<br>int main()<br>{<br>    int fd[2];<br>    char readbuf[1024];</p>
+<pre><code>if(pipe(fd) &lt; 0)
+&#123;
+    printf(&quot;pipe error!\n&quot;);
+&#125;
+
+// create a new thread
+pthread_t tid ,t1;
+pthread_create(&amp;tid, NULL, func, &amp;fd[1]);
+//pthread_join(tid, NULL);
+
+//sleep(3);
+while(!threadQuit)&#123;
+    fd_set rds;    //声明描述符集合
+    FD_ZERO(&amp;rds);   //清空描述符集合
+    FD_SET(fd[0], &amp;rds); //设置描述符集合
+
+    struct timeval tv;
+    tv.tv_sec = 10;
+    tv.tv_usec = 0;
+    int ret = select(fd[0] + 1, &amp;rds, NULL, NULL, &amp;tv);//调用select（）监控函数
+    printf(&quot;ret = %d\n&quot;, ret);
+    if (ret &lt; 0)  
+    &#123;
+        printf(&quot;select error!\n&quot;);
+        exit(1);
+    &#125; else if ( 0 == ret)  
+    &#123;
+        printf(&quot;no data within 10 seconds!\n&quot;);
+        continue;
+    &#125;
+    printf(&quot;read pipe start!\n&quot;);
+    // read buf from child thread
+    read( fd[0], readbuf, sizeof(readbuf) );
+    printf(&quot;read buf = %s\n&quot;, readbuf);
+    pthread_create(&amp;t1, NULL, func2, NULL);
+&#125;
+printf(&quot;abort while!\n&quot;);
+return 0;
+</code></pre>
+<p>}</p>
+<p>10s select timeout<br>write,read<br>10s select timeout<br>退出循环，结束</p>
+<p>g++ threadpipe.cpp -o threadpipe.exe<br>运行</p>
+<p>$ ./threadpipe.exe<br>ret = 0<br>no data within 10 seconds!<br>sleep(15) end write pipe!<br>write fd = 4<br>ret = 1<br>read pipe start!<br>read buf = hello everyone!<br>func2 threadQuit = 0<br>ret = 0<br>no data within 10 seconds!<br>abort while!</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/12/12/selectpipe/" data-id="ckx2m2vpr0001wgic4m3y53z8" data-title="linux使用非阻塞I/O的应用程序通常会使用select()" class="article-share-link">Teilen</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-threadpipe" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2021/12/05/threadpipe/" class="article-date">
@@ -610,6 +695,10 @@ printf(&quot;pthread_join stop datetime: %d-%d-%d %d:%d:%d\n&quot;,tm_now-&gt;tm
       <ul>
         
           <li>
+            <a href="/2021/12/12/selectpipe/">linux使用非阻塞I/O的应用程序通常会使用select()</a>
+          </li>
+        
+          <li>
             <a href="/2021/12/05/threadpipe/">linux 线程之间通过管道通信(pipe)</a>
           </li>
         
@@ -623,10 +712,6 @@ printf(&quot;pthread_join stop datetime: %d-%d-%d %d:%d:%d\n&quot;,tm_now-&gt;tm
         
           <li>
             <a href="/2021/11/13/socket/">linux下C++ socket网络编程 即时通信系统</a>
-          </li>
-        
-          <li>
-            <a href="/2021/11/13/hello-world/">Hello World</a>
           </li>
         
       </ul>
