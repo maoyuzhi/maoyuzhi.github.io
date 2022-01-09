@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>C++线程安全队列 | 猿的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="参考https:&#x2F;&#x2F;www.cnblogs.com&#x2F;mathyk&#x2F;p&#x2F;11572989.html #include #include #include #include #include #include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;pthread.h&gt;#include &lt;errno.h&gt;#includ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++线程安全队列">
+<meta property="og:url" content="http://example.com/2022/01/09/threadsafequeue/index.html">
+<meta property="og:site_name" content="猿的博客">
+<meta property="og:description" content="参考https:&#x2F;&#x2F;www.cnblogs.com&#x2F;mathyk&#x2F;p&#x2F;11572989.html #include #include #include #include #include #include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;pthread.h&gt;#include &lt;errno.h&gt;#includ">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-01-09T07:15:48.993Z">
+<meta property="article:modified_time" content="2022-01-09T07:15:48.993Z">
+<meta property="article:author" content="maoyuzhi">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="猿的博客" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">猿的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-threadsafequeue" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/01/09/threadsafequeue/" class="article-date">
+  <time class="dt-published" datetime="2022-01-09T07:15:48.993Z" itemprop="datePublished">2022-01-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      C++线程安全队列
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>参考<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/mathyk/p/11572989.html">https://www.cnblogs.com/mathyk/p/11572989.html</a></p>
+<p>#include <queue><br>#include <mutex><br>#include <condition_variable><br>#include <initializer_list><br>#include <iostream><br>#include &lt;stdio.h&gt;<br>#include &lt;stdlib.h&gt;<br>#include &lt;pthread.h&gt;<br>#include &lt;errno.h&gt;<br>#include &lt;unistd.h&gt;<br>using namespace std;<br>        /*<br>        * 线程安全队列<br>        * T为队列元素类型<br>        * 因为有std::mutex和std::condition_variable类成员,所以此类不支持复制构造函数也不支持赋值操作符(=)<br>        * <em>/<br>        template<typename t><br>        class threadsafe_queue{<br>        private:<br>            //data_queue访问信号量<br>            mutable std::mutex mut;<br>            mutable std::condition_variable data_cond;<br>            using queue_type = std::queue<T>;<br>            queue_type data_queue;<br>        public:<br>            using value_type = typename queue_type::value_type;<br>            using container_type = typename queue_type::container_type;<br>            threadsafe_queue() = default;<br>            threadsafe_queue(const threadsafe_queue&amp;) = delete;<br>            threadsafe_queue&amp; operator=(const threadsafe_queue&amp;) = delete;<br>            /</T></typename></em><br>            * 使用迭代器为参数的构造函数,适用所有容器对象<br>            * */<br>            template<typename _inputiterator><br>            threadsafe_queue(_InputIterator first, _InputIterator last){<br>                for (auto itor = first; itor != last; ++itor){<br>                    data_queue.push(<em>itor);<br>                }<br>            }<br>            explicit threadsafe_queue(const container_type &amp;c) :data_queue(c){}<br>            /</em><br>            * 使用初始化列表为参数的构造函数<br>            * <em>/<br>            threadsafe_queue(std::initializer_list<value_type> list) :threadsafe_queue(list.begin(), list.end()){<br>            }<br>            /</value_type></em><br>            * 将元素加入队列<br>            * */<br>            void push(const value_type &amp;new_value){<br>                std::lock_guard<a href="std::mutex">std::mutex</a>lk(mut);<br>                    data_queue.push(std::move(new_value));<br>                    data_cond.notify_one();<br>            }</typename></iostream></initializer_list></condition_variable></mutex></queue></p>
+<pre><code>        /*
+        * 从队列中弹出一个元素,如果队列为空就阻塞
+        * */
+        value_type wait_and_pop()&#123;
+            std::unique_lock&lt;std::mutex&gt;lk(mut);
+            data_cond.wait(lk, [this]&#123;return !this-&gt;data_queue.empty(); &#125;);
+            auto value = std::move(data_queue.front());
+            data_queue.pop();
+            return value;
+        &#125;
+        /*
+        * 从队列中弹出一个元素,如果队列为空返回false
+        * */
+        bool try_pop(value_type&amp; value)&#123;
+            std::lock_guard&lt;std::mutex&gt;lk(mut);
+            if (data_queue.empty())
+                return false;
+            value = std::move(data_queue.front());
+            data_queue.pop();
+            return true;
+        &#125;
+        /*
+        * 返回队列是否为空
+        * */
+        auto empty() const-&gt;decltype(data_queue.empty()) &#123;
+            std::lock_guard&lt;std::mutex&gt;lk(mut);
+            return data_queue.empty();
+        &#125;
+        /*
+        * 返回队列中元素数个
+        * */
+        auto size() const-&gt;decltype(data_queue.size())&#123;
+            std::lock_guard&lt;std::mutex&gt;lk(mut);
+            return data_queue.size();
+        &#125;
+    &#125;; /* threadsafe_queue */
+</code></pre>
+<p>struct readData<br>{<br>    char *data;<br>    int length;<br>}a,b;<br>threadsafe_queue<readData> test;<br>static void *func1(void *)/<em>1秒钟之后退出</em>/<br>{<br>    while(1){<br>        sleep(7);<br>        time_t now;    //time_t是一种类型，定义time_t类型的t<br>        struct tm *tm_now ;<br>        time(&amp;now) ;<br>        tm_now = localtime(&amp;now) ;//get date<br>        printf(“func1 start datetime: %d-%d-%d %d:%d:%d\n”,tm_now-&gt;tm_year+1900, tm_now-&gt;tm_mon+1, tm_now-&gt;tm_mday, tm_now-&gt;tm_hour, tm_now-&gt;tm_min, tm_now-&gt;tm_sec) ;</readData></p>
+<pre><code>    // readData a;
+    a.data = &quot;asdf&quot;;
+    a.length = 4;
+    test.push(a);
+    printf(&quot;test.size %d \n&quot;, test.size());
+    time(&amp;now) ;
+    tm_now = localtime(&amp;now) ;//get date
+    printf(&quot;func1 end datetime: %d-%d-%d %d:%d:%d\n&quot;,tm_now-&gt;tm_year+1900, tm_now-&gt;tm_mon+1, tm_now-&gt;tm_mday, tm_now-&gt;tm_hour, tm_now-&gt;tm_min, tm_now-&gt;tm_sec) ;
+
+    // printf(&quot;线程1（ID：0x%x）退出。\n&quot;,(unsigned int)pthread_self());
+&#125;
+pthread_exit((void *)0);
+</code></pre>
+<p>}</p>
+<p>static void *func2(void *)/<em>10秒钟之后退出</em>/<br>{<br>    while(1){<br>        sleep(4);<br>        time_t now;    //time_t是一种类型，定义time_t类型的t<br>        struct tm *tm_now ;<br>        time(&amp;now) ;<br>        tm_now = localtime(&amp;now) ;//get date<br>        printf(“func2 start datetime: %d-%d-%d %d:%d:%d\n”,tm_now-&gt;tm_year+1900, tm_now-&gt;tm_mon+1, tm_now-&gt;tm_mday, tm_now-&gt;tm_hour, tm_now-&gt;tm_min, tm_now-&gt;tm_sec) ;</p>
+<pre><code>    // if (false == test.try_pop(b))
+    // &#123;
+    //     printf(&quot;Hello,func2 false == test.try_pop(b) \n&quot;);
+    //     continue;
+    // &#125;
+    // readData b;
+    b = test.wait_and_pop();
+    printf(&quot;b.data %s \n&quot;, b.data);
+    time(&amp;now) ;
+    tm_now = localtime(&amp;now) ;//get date
+    printf(&quot;func2 end datetime: %d-%d-%d %d:%d:%d\n&quot;,tm_now-&gt;tm_year+1900, tm_now-&gt;tm_mon+1, tm_now-&gt;tm_mday, tm_now-&gt;tm_hour, tm_now-&gt;tm_min, tm_now-&gt;tm_sec) ;
+
+    
+&#125;
+
+pthread_exit((void *)0);
+</code></pre>
+<p>}<br>int main(void)<br>{<br>    time_t now;    //time_t是一种类型，定义time_t类型的t<br>    struct tm *tm_now ;<br>    time(&amp;now) ;<br>    tm_now = localtime(&amp;now) ;//get date<br>    printf(“start datetime: %d-%d-%d %d:%d:%d\n”,tm_now-&gt;tm_year+1900, tm_now-&gt;tm_mon+1, tm_now-&gt;tm_mday, tm_now-&gt;tm_hour, tm_now-&gt;tm_min, tm_now-&gt;tm_sec) ;</p>
+<pre><code>pthread_t tid1,tid2;
+
+pthread_create(&amp;tid1,NULL,&amp;func1,NULL);
+pthread_create(&amp;tid2,NULL,&amp;func2,NULL);
+// time(&amp;now) ;
+// tm_now = localtime(&amp;now) ;//get date
+// printf(&quot;start datetime: %d-%d-%d %d:%d:%d\n&quot;,tm_now-&gt;tm_year+1900, tm_now-&gt;tm_mon+1, tm_now-&gt;tm_mday, tm_now-&gt;tm_hour, tm_now-&gt;tm_min, tm_now-&gt;tm_sec) ;
+pthread_join(tid1,NULL);
+pthread_join(tid2,NULL);
+readData a;
+a.data = &quot;asdf&quot;;
+a.length = 4;
+test.push(a);
+
+printf(&quot;Hello,World， test.size %d \n&quot;, test.size());
+readData b;
+b = test.wait_and_pop();
+printf(&quot;Hello,World， b.data %s \n&quot;, b.data);
+printf(&quot;Hello,World， b.length %d \n&quot;, b.length);
+
+a.data = &quot;1111&quot;;
+a.length = 5;
+test.push(a);
+printf(&quot;Hello,World， test.size %d \n&quot;, test.size());
+
+b = test.wait_and_pop();
+printf(&quot;Hello,World， b.data %s \n&quot;, b.data);
+printf(&quot;Hello,World， b.length %d \n&quot;, b.length);
+
+return 0;
+</code></pre>
+<p>}<br>运行</p>
+<p>./queuethreadsafe.exe<br>start datetime: 2021-11-29 7:22:24<br>func2 start datetime: 2021-11-29 7:22:28<br>func1 start datetime: 2021-11-29 7:22:31<br>test.size 1<br>b.data asdf<br>func1 end datetime: 2021-11-29 7:22:31<br>func2 end datetime: 2021-11-29 7:22:31</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/01/09/threadsafequeue/" data-id="cky6xij450005vwuj7nmw0evk" data-title="C++线程安全队列" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2022/01/09/threadpipe/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">linux 线程之间通过管道通信(pipe)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/01/09/threadsafequeue/">C++线程安全队列</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/09/threadpipe/">linux 线程之间通过管道通信(pipe)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/09/thread/">Linux线程退出方式</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/09/selectpipe/">linux使用非阻塞I/O的应用程序通常会使用select()</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/09/socket/">linux下C++ socket网络编程 即时通信系统</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 maoyuzhi<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
