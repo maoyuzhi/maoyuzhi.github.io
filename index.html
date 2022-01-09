@@ -59,10 +59,10 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
       </nav>
       <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Suche"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
       </div>
     </div>
   </div>
@@ -70,6 +70,50 @@
 
       <div class="outer">
         <section id="main">
+  
+    <article id="post-hexoMoveNewC" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/01/09/hexoMoveNewC/" class="article-date">
+  <time class="dt-published" datetime="2022-01-09T07:33:37.206Z" itemprop="datePublished">2022-01-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/01/09/hexoMoveNewC/">Move hexo to new computer</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-branch"><a href="#Create-a-new-branch" class="headerlink" title="Create a new branch"></a>Create a new branch</h3><p>旧电脑上传分支<br>首先，先在github上新建一个source分支<br>然后在这个仓库的settings中，选择默认分支为hexo分支（这样每次同步的时候就不用指定分支，比较方便）。<br>然后在本地的任意目录下，打开git bash，</p>
+<p>git clone <a href="mailto:&#x67;&#x69;&#x74;&#x40;&#103;&#105;&#116;&#x68;&#x75;&#x62;&#x2e;&#99;&#x6f;&#109;">&#x67;&#x69;&#x74;&#x40;&#103;&#105;&#116;&#x68;&#x75;&#x62;&#x2e;&#99;&#x6f;&#109;</a>:<em><strong>/</strong></em>.github.io.git source<br>将其克隆到本地，因为默认分支已经设成了source，所以clone时只clone了source。<br>在source目录中，把除了.git 文件夹外的所有文件都删掉<br>讨论下哪些文件是必须拷贝的：<br>首先是之前自己修改的文件，像站点配置_config.yml，theme文件夹里面的主题，以及source里面自己写的博客文件，这些肯定要拷贝的。<br>除此之外，还有三个文件需要有，就是scaffolds文件夹（文章的模板）、package.json（说明使用哪些包）和.gitignore（限定在提交的时候哪些文件可以忽略）。<br>其实，这三个文件不是我们修改的，所以即使丢失了，也没有关系，我们可以建立一个新的文件夹，然后在里面执行hexo init，就会生成这三个文件，我们只需要将它们拷贝过来使用即可。<br>总结：_config.yml，theme/，source/，scaffolds/，package.json，.gitignore，是需要拷贝的。<br>再讨论下哪些文件是不必拷贝的，或者说可以删除的：<br>首先是.git文件，无论是在站点根目录下，还是主题目录下的.git文件，都可以删掉。<br>然后是文件夹node_modules（在用npm install会重新生成），public（这个在用hexo g时会重新生成），.deploy_git文件夹（在使用hexo d时也会重新生成），db.json文件。<br>其实上面这些文件也就是.gitignore文件里面记载的可以忽略的内容。总结：.git/，node_modules/，public/，.deploy_git/，db.json文件需要删除。</p>
+<h3 id="push-to-new-branch"><a href="#push-to-new-branch" class="headerlink" title="push to new branch"></a>push to new branch</h3><p>而后<br>git add .<br>git commit –m “add branch”<br>git push<br>这样就上传完了，可以去你的github上看一看hexo分支有没有上传上去，其中node_modules、public、db.json已经被忽略掉了，没有关系，不需要上传的，因为在别的电脑上需要重新输入命令安装 。</p>
+<h3 id="更换电脑操作"><a href="#更换电脑操作" class="headerlink" title="更换电脑操作"></a>更换电脑操作</h3><p>安装git<br>设置git全局邮箱和用户名<br>设置ssh key<br>安装nodejs<br>安装hexo<br>npm install hexo-cli -g<br>直接在任意文件夹下，<br>git clone git@……………… source<br>cd source<br>npm install<br>npm install hexo-deployer-git –save</p>
+<p>需要使用git push把源文件推到分支上<br>$ git add .<br>$ git commit -m “xxxx”<br>$ git push origin hexo</p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><p>生成，部署：<br>hexo g<br>hexo s<br>本地查看<br>hexo d</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/01/09/hexoMoveNewC/" data-id="cky6xxdxd00010kuj9iukgub3" data-title="Move hexo to new computer" class="article-share-link">Teilen</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
   
     <article id="post-threadsafequeue" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
@@ -203,7 +247,7 @@ return 0;
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2022/01/09/threadsafequeue/" data-id="cky6xij450005vwuj7nmw0evk" data-title="C++线程安全队列" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2022/01/09/threadsafequeue/" data-id="cky6xij450005vwuj7nmw0evk" data-title="C++线程安全队列" class="article-share-link">Teilen</a>
       
       
       
@@ -304,7 +348,7 @@ return 0;
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2022/01/09/threadpipe/" data-id="cky6xij450004vwujew00fquj" data-title="linux 线程之间通过管道通信(pipe)" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2022/01/09/threadpipe/" data-id="cky6xij450004vwujew00fquj" data-title="linux 线程之间通过管道通信(pipe)" class="article-share-link">Teilen</a>
       
       
       
@@ -396,7 +440,7 @@ printf(&quot;pthread_join stop datetime: %d-%d-%d %d:%d:%d\n&quot;,tm_now-&gt;tm
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2022/01/09/thread/" data-id="cky6xij440003vwuj4dbz9int" data-title="Linux线程退出方式" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2022/01/09/thread/" data-id="cky6xij440003vwuj4dbz9int" data-title="Linux线程退出方式" class="article-share-link">Teilen</a>
       
       
       
@@ -481,7 +525,7 @@ return 0;
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2022/01/09/selectpipe/" data-id="cky6xij3x0000vwujgag8ahev" data-title="linux使用非阻塞I/O的应用程序通常会使用select()" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2022/01/09/selectpipe/" data-id="cky6xij3x0000vwujgag8ahev" data-title="linux使用非阻塞I/O的应用程序通常会使用select()" class="article-share-link">Teilen</a>
       
       
       
@@ -601,7 +645,7 @@ return 0;
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2022/01/09/socket/" data-id="cky6xij430002vwuj6azcgm7e" data-title="linux下C++ socket网络编程 即时通信系统" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2022/01/09/socket/" data-id="cky6xij430002vwuj6azcgm7e" data-title="linux下C++ socket网络编程 即时通信系统" class="article-share-link">Teilen</a>
       
       
       
@@ -627,7 +671,7 @@ return 0;
         
   
     <h1 itemprop="name">
-      <a class="p-name article-title" href="/2022/01/09/hello-world/">Hello World</a>
+      <a class="p-name article-title" href="/2022/01/09/hello-world/">Hello World hexo</a>
     </h1>
   
 
@@ -652,7 +696,7 @@ return 0;
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2022/01/09/hello-world/" data-id="cky6xij420001vwujf55m0fib" data-title="Hello World" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2022/01/09/hello-world/" data-id="cky6xij420001vwujf55m0fib" data-title="Hello World hexo" class="article-share-link">Teilen</a>
       
       
       
@@ -680,7 +724,7 @@ return 0;
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archiv</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li></ul>
     </div>
@@ -690,9 +734,13 @@ return 0;
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2022/01/09/hexoMoveNewC/">Move hexo to new computer</a>
+          </li>
         
           <li>
             <a href="/2022/01/09/threadsafequeue/">C++线程安全队列</a>
@@ -708,10 +756,6 @@ return 0;
         
           <li>
             <a href="/2022/01/09/selectpipe/">linux使用非阻塞I/O的应用程序通常会使用select()</a>
-          </li>
-        
-          <li>
-            <a href="/2022/01/09/socket/">linux下C++ socket网络编程 即时通信系统</a>
           </li>
         
       </ul>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Move hexo to new computer | 猿的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Quick StartCreate a new branch旧电脑上传分支首先，先在github上新建一个source分支然后在这个仓库的settings中，选择默认分支为hexo分支（这样每次同步的时候就不用指定分支，比较方便）。然后在本地的任意目录下，打开git bash， git clone &amp;#x67;&amp;#x69;&amp;#x74;&amp;#x40;&amp;#103;&amp;#105;&amp;#116;&amp;#x68;&amp;#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Move hexo to new computer">
+<meta property="og:url" content="http://example.com/2022/01/09/hexoMoveNewC/index.html">
+<meta property="og:site_name" content="猿的博客">
+<meta property="og:description" content="Quick StartCreate a new branch旧电脑上传分支首先，先在github上新建一个source分支然后在这个仓库的settings中，选择默认分支为hexo分支（这样每次同步的时候就不用指定分支，比较方便）。然后在本地的任意目录下，打开git bash， git clone &amp;#x67;&amp;#x69;&amp;#x74;&amp;#x40;&amp;#103;&amp;#105;&amp;#116;&amp;#x68;&amp;#">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-01-09T07:33:37.206Z">
+<meta property="article:modified_time" content="2022-01-09T07:46:17.795Z">
+<meta property="article:author" content="maoyuzhi">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="猿的博客" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">猿的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Suche"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-hexoMoveNewC" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/01/09/hexoMoveNewC/" class="article-date">
+  <time class="dt-published" datetime="2022-01-09T07:33:37.206Z" itemprop="datePublished">2022-01-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Move hexo to new computer
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-branch"><a href="#Create-a-new-branch" class="headerlink" title="Create a new branch"></a>Create a new branch</h3><p>旧电脑上传分支<br>首先，先在github上新建一个source分支<br>然后在这个仓库的settings中，选择默认分支为hexo分支（这样每次同步的时候就不用指定分支，比较方便）。<br>然后在本地的任意目录下，打开git bash，</p>
+<p>git clone <a href="mailto:&#x67;&#x69;&#x74;&#x40;&#103;&#105;&#116;&#x68;&#x75;&#x62;&#x2e;&#99;&#x6f;&#109;">&#x67;&#x69;&#x74;&#x40;&#103;&#105;&#116;&#x68;&#x75;&#x62;&#x2e;&#99;&#x6f;&#109;</a>:<em><strong>/</strong></em>.github.io.git source<br>将其克隆到本地，因为默认分支已经设成了source，所以clone时只clone了source。<br>在source目录中，把除了.git 文件夹外的所有文件都删掉<br>讨论下哪些文件是必须拷贝的：<br>首先是之前自己修改的文件，像站点配置_config.yml，theme文件夹里面的主题，以及source里面自己写的博客文件，这些肯定要拷贝的。<br>除此之外，还有三个文件需要有，就是scaffolds文件夹（文章的模板）、package.json（说明使用哪些包）和.gitignore（限定在提交的时候哪些文件可以忽略）。<br>其实，这三个文件不是我们修改的，所以即使丢失了，也没有关系，我们可以建立一个新的文件夹，然后在里面执行hexo init，就会生成这三个文件，我们只需要将它们拷贝过来使用即可。<br>总结：_config.yml，theme/，source/，scaffolds/，package.json，.gitignore，是需要拷贝的。<br>再讨论下哪些文件是不必拷贝的，或者说可以删除的：<br>首先是.git文件，无论是在站点根目录下，还是主题目录下的.git文件，都可以删掉。<br>然后是文件夹node_modules（在用npm install会重新生成），public（这个在用hexo g时会重新生成），.deploy_git文件夹（在使用hexo d时也会重新生成），db.json文件。<br>其实上面这些文件也就是.gitignore文件里面记载的可以忽略的内容。总结：.git/，node_modules/，public/，.deploy_git/，db.json文件需要删除。</p>
+<h3 id="push-to-new-branch"><a href="#push-to-new-branch" class="headerlink" title="push to new branch"></a>push to new branch</h3><p>而后<br>git add .<br>git commit –m “add branch”<br>git push<br>这样就上传完了，可以去你的github上看一看hexo分支有没有上传上去，其中node_modules、public、db.json已经被忽略掉了，没有关系，不需要上传的，因为在别的电脑上需要重新输入命令安装 。</p>
+<h3 id="更换电脑操作"><a href="#更换电脑操作" class="headerlink" title="更换电脑操作"></a>更换电脑操作</h3><p>安装git<br>设置git全局邮箱和用户名<br>设置ssh key<br>安装nodejs<br>安装hexo<br>npm install hexo-cli -g<br>直接在任意文件夹下，<br>git clone git@……………… source<br>cd source<br>npm install<br>npm install hexo-deployer-git –save</p>
+<p>需要使用git push把源文件推到分支上<br>$ git add .<br>$ git commit -m “xxxx”<br>$ git push origin hexo</p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><p>生成，部署：<br>hexo g<br>hexo s<br>本地查看<br>hexo d</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/01/09/hexoMoveNewC/" data-id="cky6xxdxd00010kuj9iukgub3" data-title="Move hexo to new computer" class="article-share-link">Teilen</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2022/01/09/threadsafequeue/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">C++线程安全队列</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/01/09/hexoMoveNewC/">Move hexo to new computer</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/09/threadsafequeue/">C++线程安全队列</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/09/threadpipe/">linux 线程之间通过管道通信(pipe)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/09/thread/">Linux线程退出方式</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/09/selectpipe/">linux使用非阻塞I/O的应用程序通常会使用select()</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 maoyuzhi<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
